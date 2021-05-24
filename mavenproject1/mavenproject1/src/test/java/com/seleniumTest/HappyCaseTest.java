@@ -7,7 +7,9 @@ package com.seleniumTest;
 
 import com.myproject.mavenproject1.Script;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
@@ -19,21 +21,24 @@ public class HappyCaseTest {
 
     public void setup() {
         downloader = new Script();
+
         DesiredCapabilities capabilities = downloader.setUpAdblock();
         downloader.initDriver(capabilities);
     }
 
     @Test
-    public void testSimpleAdblockInstall() throws Exception {
+    public void testHappyPath() throws Exception {
         setup();
 
         downloader.setUrl("https://www.reddit.com/r/memes/");
 
         // Connection should be successful
-        assertTrue(downloader.checkConnection(5));
-        
+        assertTrue(downloader.checkConnection());
+
         downloader.connect();
 
-        downloader.harvest();
+        // Harvesting should pass
+        downloader.harvest(1);
     }
 }
+

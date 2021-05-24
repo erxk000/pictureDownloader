@@ -6,9 +6,11 @@
 package com.seleniumTest;
 
 import com.myproject.mavenproject1.Script;
-import java.net.ConnectException;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import java.net.ConnectException;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -26,18 +28,17 @@ public class InvalidUrlTest {
     }
 
     @Test
-    public void testSimpleAdblockInstall() throws Exception {
+    public void testInvalidUrl() throws Exception {
         setup();
 
         downloader.setUrl("https://www.reddit.com/r/memes/invalidurl");
 
-        // Connection shouldn't be successful
-        // after adblock is installed, error is shown
-        assertFalse(downloader.checkConnection(5));
-  
-        // Harvesting shouldn't pass
-        // showing us error message based in "harvest" method
-        assertThrows(ConnectException.class, () -> downloader.harvest(), "Connect exception");
-        
+        // Test that invalid URL is catched during connectivity check
+        assertFalse(downloader.checkConnection());
+
+        // If connectivity check fails, the following should as well
+        assertThrows(TimeoutException.class, () -> downloader.connect(), "TimeoutException was expected");
+        assertThrows(ConnectException.class, () -> downloader.harvest(1), "ConnectException was expected");
     }
 }
+

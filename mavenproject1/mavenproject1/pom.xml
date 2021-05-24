@@ -32,5 +32,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+    <name>imageDownloader2</name>
 </project>
